@@ -5,6 +5,7 @@ import com.andres.veterinaria.models.entities.Cliente;
 import com.andres.veterinaria.models.entities.Rol;
 import com.andres.veterinaria.models.entities.Usuario;
 import com.andres.veterinaria.models.mapper.ClienteMapperDto;
+import com.andres.veterinaria.models.requests.ClienteRequest;
 import com.andres.veterinaria.repositories.ClienteRepository;
 import com.andres.veterinaria.repositories.RolRepository;
 import com.andres.veterinaria.repositories.UsuarioRepository;
@@ -66,5 +67,19 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setTelefono(ucDto.getTelefono());
         cliente.setUsuario(usuarioDb);
         clienteRepository.save(cliente);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Object> actualizarCliente(Long idCliente, ClienteRequest clienteRequest) {
+        Optional<Object> op = Optional.of(clienteRepository.buscarCliente(idCliente));
+        if (op.isPresent()) {
+            clienteRepository.actualizarCliente(idCliente, clienteRequest.getNombre(), clienteRequest.getApellido(),
+                    clienteRequest.getTelefono(), clienteRequest.getEmail(), clienteRequest.getPassword());
+        } else {
+            throw new RuntimeException("El cliente no se encuentra.");
+        }
+
+        return Optional.of(clienteRepository.buscarCliente(idCliente));
     }
 }

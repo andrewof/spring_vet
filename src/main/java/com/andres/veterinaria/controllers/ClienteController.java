@@ -2,6 +2,7 @@ package com.andres.veterinaria.controllers;
 
 import com.andres.veterinaria.models.dto.UsuarioClienteDto;
 import com.andres.veterinaria.models.entities.Cliente;
+import com.andres.veterinaria.models.requests.ClienteRequest;
 import com.andres.veterinaria.services.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,16 @@ public class ClienteController {
         }
         clienteService.registrarCliente(ucDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarCliente(@Valid @RequestBody ClienteRequest clienteRequest, @PathVariable Long id) {
+        Optional<Object> op = clienteService.listarCliente(id);
+        if (op.isPresent()) {
+            clienteService.actualizarCliente(id, clienteRequest);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     private ResponseEntity<?> validation(BindingResult result) {
