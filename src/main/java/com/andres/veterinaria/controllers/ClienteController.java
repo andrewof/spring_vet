@@ -1,6 +1,7 @@
 package com.andres.veterinaria.controllers;
 
 import com.andres.veterinaria.models.dto.UsuarioClienteDto;
+import com.andres.veterinaria.models.entities.Cliente;
 import com.andres.veterinaria.models.requests.ClienteRequest;
 import com.andres.veterinaria.services.ClienteService;
 import jakarta.validation.Valid;
@@ -29,7 +30,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> listarCliente(@PathVariable Long id) {
-        return ResponseEntity.ok(clienteService.listarCliente(id));
+        return ResponseEntity.ok(clienteService.listarClienteDto(id));
     }
 
     @PostMapping
@@ -40,7 +41,7 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarCliente(@Valid @RequestBody ClienteRequest clienteRequest, @PathVariable Long id, BindingResult result) {
-        Optional<Object> op = clienteService.listarCliente(id);
+        Optional<Cliente> op = clienteService.listarCliente(id);
         if (op.isPresent()) {
             clienteService.actualizarCliente(id, clienteRequest);
             return ResponseEntity.ok().build();

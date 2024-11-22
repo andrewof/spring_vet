@@ -40,12 +40,14 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Object> listarCliente(Long idCliente) {
+    public Optional<Cliente> listarCliente(Long idCliente) {
+        return clienteRepository.buscarCliente(idCliente);
+    }
+
+    @Override
+    public List<UsuarioClienteDto> listarClienteDto(Long idCliente) {
         Optional<Cliente> opClientes = clienteRepository.buscarCliente(idCliente);
-        if (opClientes.isPresent()) {
-            return Optional.of(opClientes.stream().map(c -> ClienteMapperDto.builder().setCliente(c).build()).collect(Collectors.toList()));
-        }
-        return Optional.empty();
+        return opClientes.stream().map(c -> ClienteMapperDto.builder().setCliente(c).build()).collect(Collectors.toList());
     }
 
     @Override
