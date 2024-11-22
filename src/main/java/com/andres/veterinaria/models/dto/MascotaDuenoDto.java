@@ -8,8 +8,7 @@ public class MascotaDuenoDto {
     private String tipo;
     private String raza;
     private LocalDate fechaNacimiento;
-    private String nombreDueno;
-    private String apellidoDueno;
+    private Long idDueno;
 
     public Long getIdMascota() {
         return idMascota;
@@ -51,20 +50,12 @@ public class MascotaDuenoDto {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getNombreDueno() {
-        return nombreDueno;
+    public Long getIdDueno() {
+        return idDueno;
     }
 
-    public void setNombreDueno(String nombreDueno) {
-        this.nombreDueno = nombreDueno;
-    }
-
-    public String getApellidoDueno() {
-        return apellidoDueno;
-    }
-
-    public void setApellidoDueno(String apellidoDueno) {
-        this.apellidoDueno = apellidoDueno;
+    public void setIdDueno(Long idDueno) {
+        this.idDueno = idDueno;
     }
 }
 

@@ -32,7 +32,9 @@ public class MascotaServiceImpl implements MascotaService {
     }
 
     @Transactional
-    public Mascota registrarMascota(Mascota mascota) {
-        return mascotaRepository.save(mascota);
+    public MascotaDuenoDto registrarMascota(MascotaDuenoDto mascotaDuenoDto) {
+        Mascota mascota = mascotaDuenoMapper.toMascota(mascotaDuenoDto);
+        mascota = mascotaRepository.save(mascota);
+        return mascotaDuenoMapper.toMascotaDuenoDto(mascota);
     }
 }

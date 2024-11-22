@@ -78,4 +78,8 @@ public class Mascota {
     public void setDueno(Cliente dueno) {
         this.dueno = dueno;
     }
+
+    public Long getIdDueno() {
+        return dueno != null ? dueno.getIdCliente() : null;
+    }
 }

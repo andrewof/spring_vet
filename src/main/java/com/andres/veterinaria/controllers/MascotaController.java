@@ -1,5 +1,6 @@
 package com.andres.veterinaria.controllers;
 
+import com.andres.veterinaria.models.dto.MascotaDuenoDto;
 import com.andres.veterinaria.models.entities.Cliente;
 import com.andres.veterinaria.models.entities.Mascota;
 import com.andres.veterinaria.services.ClienteService;
@@ -43,12 +44,12 @@ public class MascotaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registrarMascota(@Valid @RequestBody Mascota mascota, BindingResult result) {
-        Optional<Cliente> optionalCliente = clienteService.listarCliente(mascota.getDueno().getIdCliente());
+    public ResponseEntity<?> registrarMascota(@Valid @RequestBody MascotaDuenoDto mascotaDuenoDto, BindingResult result) {
+        Optional<Cliente> optionalCliente = clienteService.listarCliente(mascotaDuenoDto.getIdDueno());
         if (optionalCliente.isEmpty()) {
             throw new RuntimeException("No se encontró el cliente.");
         }
-        mascota.setDueno(optionalCliente.get());
-        return ResponseEntity.status(HttpStatus.CREATED).body(mascotaService.registrarMascota(mascota));
+        mascotaDuenoDto.setIdDueno(optionalCliente.get().getIdCliente());
+        return ResponseEntity.status(HttpStatus.CREATED).body(mascotaService.registrarMascota(mascotaDuenoDto));
     }
 }

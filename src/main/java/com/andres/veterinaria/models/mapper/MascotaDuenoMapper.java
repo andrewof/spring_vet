@@ -13,24 +13,20 @@ public interface MascotaDuenoMapper {
 
 
     @Mappings({
-            @Mapping(source = "idMascota", target = "idMascota"),
             @Mapping(source = "nombre", target = "nombreMascota"),
             @Mapping(source = "tipo", target = "tipo"),
             @Mapping(source = "raza", target = "raza"),
             @Mapping(source = "fechaNacimiento", target = "fechaNacimiento"),
-            @Mapping(source = "dueno.nombre", target = "nombreDueno"),
-            @Mapping(source = "dueno.apellido", target = "apellidoDueno")
+            @Mapping(source = "dueno.idCliente", target = "idDueno")
     })
     MascotaDuenoDto toMascotaDuenoDto(Mascota mascota);
 
     @Mappings({
-            @Mapping(source = "idMascota", target = "idMascota"),
             @Mapping(source = "nombreMascota", target = "nombre"),
             @Mapping(source = "tipo", target = "tipo"),
             @Mapping(source = "raza", target = "raza"),
             @Mapping(source = "fechaNacimiento", target = "fechaNacimiento"),
-            @Mapping(source = "nombreDueno", target = "dueno.nombre"),
-            @Mapping(source = "apellidoDueno", target = "dueno.apellido")
+            @Mapping(source = "idDueno", target = "dueno.idCliente")
     })
     Mascota toMascota(MascotaDuenoDto mascotaDuenoDto);
 
