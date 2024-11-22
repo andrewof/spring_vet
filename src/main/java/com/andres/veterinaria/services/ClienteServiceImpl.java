@@ -82,4 +82,16 @@ public class ClienteServiceImpl implements ClienteService {
 
         return Optional.of(clienteRepository.buscarCliente(idCliente));
     }
+
+    @Override
+    @Transactional
+    public void eliminarCliente(Long id) {
+        Optional<Cliente> op = clienteRepository.buscarCliente(id);
+        if (op.isPresent()) {
+            Cliente clienteDb = op.get();
+            usuarioRepository.deleteById(clienteDb.getUsuario().getIdUsuario());
+        } else {
+            throw new RuntimeException("No se encontró el cliente");
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.andres.veterinaria.controllers;
 
 import com.andres.veterinaria.models.dto.UsuarioClienteDto;
-import com.andres.veterinaria.models.entities.Cliente;
 import com.andres.veterinaria.models.requests.ClienteRequest;
 import com.andres.veterinaria.services.ClienteService;
 import jakarta.validation.Valid;
@@ -16,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@ControllerAdvice
 @RequestMapping("/api/customers")
 public class ClienteController {
 
@@ -33,16 +33,13 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registrarCliente(@Valid @RequestBody UsuarioClienteDto ucDto, BindingResult result) {
-        if (result.hasErrors()) {
-            return validation(result);
-        }
+    public ResponseEntity<?> registrarCliente(@Valid @RequestBody UsuarioClienteDto ucDto) {
         clienteService.registrarCliente(ucDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarCliente(@Valid @RequestBody ClienteRequest clienteRequest, @PathVariable Long id) {
+    public ResponseEntity<?> actualizarCliente(@Valid @RequestBody ClienteRequest clienteRequest, @PathVariable Long id, BindingResult result) {
         Optional<Object> op = clienteService.listarCliente(id);
         if (op.isPresent()) {
             clienteService.actualizarCliente(id, clienteRequest);
@@ -51,12 +48,9 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "El campo "+err.getField()+ " "+ err.getDefaultMessage());
-        });
-        return ResponseEntity.badRequest().body(errors);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarCliente(@PathVariable Long id) {
+        clienteService.eliminarCliente(id);
+        return ResponseEntity.noContent().build();
     }
 }

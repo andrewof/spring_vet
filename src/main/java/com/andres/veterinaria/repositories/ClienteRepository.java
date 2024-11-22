@@ -16,7 +16,6 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Optional<Cliente> buscarCliente(@Param("idCliente") Long idCliente);
 
     @Modifying
-    @Transactional
     @Query(value = """
     UPDATE clientes c 
     JOIN usuarios u ON c.id_usuario = u.id_usuario
@@ -36,4 +35,8 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
             @Param("email") String email,
             @Param("password") String password
     );
+
+    @Modifying
+    @Query(value = "DELETE FROM clientes WHERE id_cliente = :idCliente", nativeQuery = true)
+    void eliminarCliente(@Param("idCliente") Long idCliente);
 }

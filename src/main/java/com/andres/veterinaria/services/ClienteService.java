@@ -15,4 +15,6 @@ public interface ClienteService {
     Optional<Object> listarCliente(Long idCliente);
 
     Optional<Object> actualizarCliente(Long idCliente, ClienteRequest clienteRequest);
+
+    void eliminarCliente(Long id);
 }
