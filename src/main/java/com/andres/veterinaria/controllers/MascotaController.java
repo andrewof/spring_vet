@@ -2,7 +2,6 @@ package com.andres.veterinaria.controllers;
 
 import com.andres.veterinaria.models.dto.MascotaDuenoDto;
 import com.andres.veterinaria.models.entities.Cliente;
-import com.andres.veterinaria.models.entities.Mascota;
 import com.andres.veterinaria.services.ClienteService;
 import com.andres.veterinaria.services.MascotaDuenoVistaService;
 import com.andres.veterinaria.services.MascotaService;
@@ -36,7 +35,7 @@ public class MascotaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> listarMascotaDueno(@PathVariable Long id) {
-        Optional<Mascota> opMascota = mascotaService.listarMascota(id);
+        Optional<MascotaDuenoDto> opMascota = mascotaService.listarMascota(id);
         if (opMascota.isPresent()) {
             return ResponseEntity.ok(mascotaDuenoVistaService.obtenerMascotaDuenoVistaPorId(id));
         }
@@ -51,5 +50,14 @@ public class MascotaController {
         }
         mascotaDuenoDto.setIdDueno(optionalCliente.get().getIdCliente());
         return ResponseEntity.status(HttpStatus.CREATED).body(mascotaService.registrarMascota(mascotaDuenoDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarMascota(@PathVariable("id") Long id) {
+        Optional<MascotaDuenoDto> opCliente = mascotaService.listarMascota(id);
+        if (opCliente.isPresent()) {
+            return ResponseEntity.ok(mascotaService.eliminarMascota(id));
+        }
+        return ResponseEntity.notFound().build();
     }
 }

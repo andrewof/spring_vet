@@ -20,21 +20,24 @@ public class MascotaServiceImpl implements MascotaService {
     @Autowired
     private MascotaRepository mascotaRepository;
 
-    public Optional<Mascota> listarMascota(Long id) {
-        return mascotaRepository.findById(id);
+    @Transactional(readOnly = true)
+    public Optional<MascotaDuenoDto> listarMascota(Long id) {
+        Mascota mascota = mascotaRepository.findById(id).orElseThrow();
+        return Optional.ofNullable(mascotaDuenoMapper.toMascotaDuenoDto(mascota));
     }
 
-    @Override
-    public List<MascotaDuenoDto> listarMascotaDueno(Long id) {
-        Optional<Mascota> mascota = mascotaRepository.buscarMascotaPorIdDto(id);
-        return mascota.map(m -> List.of(mascotaDuenoMapper.toMascotaDuenoDto(m))).orElseThrow(
-                () -> new RuntimeException("No se encontro la mascota"));
-    }
 
     @Transactional
     public MascotaDuenoDto registrarMascota(MascotaDuenoDto mascotaDuenoDto) {
         Mascota mascota = mascotaDuenoMapper.toMascota(mascotaDuenoDto);
         mascota = mascotaRepository.save(mascota);
+        return mascotaDuenoMapper.toMascotaDuenoDto(mascota);
+    }
+
+    @Transactional
+    public MascotaDuenoDto eliminarMascota(Long idMascota) {
+        Mascota mascota = mascotaRepository.findById(idMascota).orElseThrow();
+        mascotaRepository.eliminarMascota(idMascota);
         return mascotaDuenoMapper.toMascotaDuenoDto(mascota);
     }
 }
