@@ -18,3 +18,4 @@ public interface UsuarioMapper {
 
     List<UsuarioRolDto> toUsuariosRolesDto(List<Usuario> usuarios);
 }
+

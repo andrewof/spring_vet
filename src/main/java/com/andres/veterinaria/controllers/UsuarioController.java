@@ -30,7 +30,7 @@ public class UsuarioController {
     public ResponseEntity<?> listarAdmin(@PathVariable Long id) {
         Optional<Usuario> op = usuarioService.listarAdmin(id);
         if (op.isPresent()) {
-            return ResponseEntity.ok().body(op.orElseThrow());
+            return ResponseEntity.ok().body(usuarioService.listarAdminRolDto(id));
         }
         return ResponseEntity.notFound().build();
     }

@@ -1,9 +1,17 @@
 package com.andres.veterinaria.models.dto;
 
+import com.andres.veterinaria.models.entities.Rol;
+
+import java.util.List;
+
 public class UsuarioRolDto {
     private String email;
-    private Long idRol;
-    private String rol;
+    private List<Rol> roles;
+
+    public UsuarioRolDto(String email, List<Rol> roles) {
+        this.email = email;
+        this.roles = roles;
+    }
 
     public String getEmail() {
         return email;
@@ -13,20 +21,12 @@ public class UsuarioRolDto {
         this.email = email;
     }
 
-    public Long getIdRol() {
-        return idRol;
+    public List<Rol> getRoles() {
+        return roles;
     }
 
-    public void setIdRol(Long idRol) {
-        this.idRol = idRol;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setRoles(List<Rol> roles) {
+        this.roles = roles;
     }
 }
 

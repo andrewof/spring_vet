@@ -5,7 +5,7 @@ import com.andres.veterinaria.models.dto.UsuarioDto;
 import com.andres.veterinaria.models.dto.UsuarioRolDto;
 import com.andres.veterinaria.models.entities.Rol;
 import com.andres.veterinaria.models.entities.Usuario;
-import com.andres.veterinaria.models.mapper.UsuarioMapper;
+import com.andres.veterinaria.models.mapper.UsuarioRolMapperDto;
 import com.andres.veterinaria.models.requests.AdminRequest;
 import com.andres.veterinaria.repositories.RolRepository;
 import com.andres.veterinaria.repositories.UsuarioRepository;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -26,21 +27,19 @@ public class UsuarioServiceImpl implements UsuarioService {
     private RolRepository rolRepository;
 
     @Autowired
-    private UsuarioMapper usuarioMapper;
-
-    @Autowired
     private EntityManager entityManager;
 
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioRolDto> listarAdmins() {
-        return usuarioMapper.toUsuariosRolesDto(usuarioRepository.obtenerAdmins());
+        List<Usuario> usuarios = usuarioRepository.obtenerAdmins();
+        return usuarios.stream().map(u -> UsuarioRolMapperDto.builder().setUsuario(u).build()).collect(Collectors.toList());
     }
 
     @Override
     public Optional<UsuarioRolDto> listarAdminRolDto(Long id) {
         Optional<Usuario> op = usuarioRepository.obtenerAdmin(id);
-        return Optional.of(usuarioMapper.toUsuarioRolDto(op.orElseThrow()));
+        return Optional.of(UsuarioRolMapperDto.builder().setUsuario(op.orElseThrow()).build());
     }
 
     @Override
@@ -61,7 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setRoles(Collections.singletonList(rolAdmin));
         Usuario usuarioDb = usuarioRepository.save(usuario);
-        return usuarioMapper.toUsuarioRolDto(usuarioDto);
+        return UsuarioRolMapperDto.builder().setUsuario(usuarioDb).build();
     }
 
     @Override
@@ -74,7 +73,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             entityManager.flush();
             entityManager.clear();
 
-            return usuarioMapper.toUsuarioRolDto(exist.get());
+            return UsuarioRolMapperDto.builder().setUsuario(exist.get()).build();
         } else {
             throw new RuntimeException("No se encontró el usuario.");
         }
@@ -86,7 +85,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Optional<Usuario> exist = usuarioRepository.obtenerAdmin(id);
         if (exist.isPresent()) {
             usuarioRepository.eliminarAdmin(id);
-            return usuarioMapper.toUsuarioRolDto(exist.get());
+            return UsuarioRolMapperDto.builder().setUsuario(exist.get()).build();
         } else {
             throw new RuntimeException("No se encontró el usuario.");
         }
