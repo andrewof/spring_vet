@@ -1,5 +1,6 @@
 package com.andres.veterinaria.controllers;
 
+import com.andres.veterinaria.models.dto.UsuarioDto;
 import com.andres.veterinaria.models.entities.Usuario;
 import com.andres.veterinaria.models.requests.AdminRequest;
 import com.andres.veterinaria.services.UsuarioService;
@@ -35,8 +36,8 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crearAdmin(@Valid @RequestBody Usuario usuario, BindingResult result) {
-        usuarioService.registrarAdmin(usuario);
+    public ResponseEntity<?> crearAdmin(@Valid @RequestBody UsuarioDto usuarioDto, BindingResult result) {
+        usuarioService.registrarAdmin(usuarioDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -44,8 +45,7 @@ public class UsuarioController {
     public ResponseEntity<?> actualizarAdmin(@Valid @RequestBody AdminRequest adminRequest, @PathVariable Long id) {
         Optional<Usuario> op = usuarioService.listarAdmin(id);
         if (op.isPresent()) {
-            usuarioService.actualizarAdmin(id, adminRequest);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(usuarioService.actualizarAdmin(id, adminRequest));
         }
         return ResponseEntity.notFound().build();
     }
@@ -54,8 +54,7 @@ public class UsuarioController {
     public ResponseEntity<?> eliminarAdmin(@PathVariable Long id) {
         Optional<Usuario> op = usuarioService.listarAdmin(id);
         if (op.isPresent()) {
-            usuarioService.eliminarUsuario(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(usuarioService.eliminarUsuario(id));
         }
         return ResponseEntity.notFound().build();
     }

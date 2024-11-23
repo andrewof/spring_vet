@@ -10,13 +10,15 @@ import java.util.Optional;
 
 public interface UsuarioService {
 
-    List<Usuario> listarAdmins();
+    List<UsuarioRolDto> listarAdmins();
 
     Optional<Usuario> listarAdmin(Long id);
 
-    void registrarAdmin(Usuario usuario);
+    Optional<UsuarioRolDto> listarAdminRolDto(Long id);
 
-    void actualizarAdmin(Long id, AdminRequest adminRequest);
+    UsuarioRolDto registrarAdmin(UsuarioDto usuarioDto);
 
-    void eliminarUsuario(Long id);
+    UsuarioRolDto actualizarAdmin(Long id, AdminRequest adminRequest);
+
+    UsuarioRolDto eliminarUsuario(Long id);
 }
