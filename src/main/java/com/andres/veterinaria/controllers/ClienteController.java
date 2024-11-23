@@ -34,24 +34,20 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registrarCliente(@Valid @RequestBody UsuarioClienteDto ucDto) {
-        clienteService.registrarCliente(ucDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> registrarCliente(@Valid @RequestBody UsuarioClienteDto ucDto, BindingResult result) {
+        UsuarioClienteDto clienteCreado = clienteService.registrarCliente(ucDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteCreado);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarCliente(@Valid @RequestBody ClienteRequest clienteRequest, @PathVariable Long id, BindingResult result) {
-        Optional<Cliente> op = clienteService.listarCliente(id);
-        if (op.isPresent()) {
-            clienteService.actualizarCliente(id, clienteRequest);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Optional<UsuarioClienteDto> op = clienteService.actualizarCliente(id, clienteRequest);
+        return op.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarCliente(@PathVariable Long id) {
-        clienteService.eliminarCliente(id);
-        return ResponseEntity.noContent().build();
+        UsuarioClienteDto clienteEliminado = clienteService.eliminarCliente(id);
+        return ResponseEntity.ok(clienteEliminado);
     }
 }

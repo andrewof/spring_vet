@@ -9,6 +9,7 @@ import com.andres.veterinaria.models.requests.ClienteRequest;
 import com.andres.veterinaria.repositories.ClienteRepository;
 import com.andres.veterinaria.repositories.RolRepository;
 import com.andres.veterinaria.repositories.UsuarioRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
 
     @Override
@@ -52,7 +56,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void registrarCliente(UsuarioClienteDto ucDto) {
+    public UsuarioClienteDto registrarCliente(UsuarioClienteDto ucDto) {
         Usuario usuario = new Usuario();
         usuario.setEmail(ucDto.getEmail());
         usuario.setPassword(ucDto.getPassword());
@@ -68,30 +72,36 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setApellido(ucDto.getApellido());
         cliente.setTelefono(ucDto.getTelefono());
         cliente.setUsuario(usuarioDb);
-        clienteRepository.save(cliente);
+        Cliente clienteDb = clienteRepository.save(cliente);
+        return ClienteMapperDto.builder().setCliente(clienteDb).build();
     }
 
     @Override
     @Transactional
-    public Optional<Object> actualizarCliente(Long idCliente, ClienteRequest clienteRequest) {
-        Optional<Object> op = Optional.of(clienteRepository.buscarCliente(idCliente));
+    public Optional<UsuarioClienteDto> actualizarCliente(Long idCliente, ClienteRequest clienteRequest) {
+        Optional<Cliente> op = clienteRepository.buscarCliente(idCliente);
         if (op.isPresent()) {
             clienteRepository.actualizarCliente(idCliente, clienteRequest.getNombre(), clienteRequest.getApellido(),
                     clienteRequest.getTelefono(), clienteRequest.getEmail(), clienteRequest.getPassword());
+
+            entityManager.flush();
+            entityManager.clear();
+
+            Optional<Cliente> opClienteActualizado = clienteRepository.buscarCliente(idCliente);
+            return opClienteActualizado.map(c -> ClienteMapperDto.builder().setCliente(c).build());
         } else {
             throw new RuntimeException("El cliente no se encuentra.");
         }
-
-        return Optional.of(clienteRepository.buscarCliente(idCliente));
     }
 
     @Override
     @Transactional
-    public void eliminarCliente(Long id) {
+    public UsuarioClienteDto eliminarCliente(Long id) {
         Optional<Cliente> op = clienteRepository.buscarCliente(id);
         if (op.isPresent()) {
             Cliente clienteDb = op.get();
             usuarioRepository.deleteById(clienteDb.getUsuario().getIdUsuario());
+            return ClienteMapperDto.builder().setCliente(clienteDb).build();
         } else {
             throw new RuntimeException("No se encontró el cliente");
         }

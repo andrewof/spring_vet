@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ClienteService {
 
-    void registrarCliente(UsuarioClienteDto ucDto);
+    UsuarioClienteDto registrarCliente(UsuarioClienteDto ucDto);
 
     List<UsuarioClienteDto> listarClientes();
 
@@ -17,7 +17,7 @@ public interface ClienteService {
 
     List<UsuarioClienteDto> listarClienteDto(Long idCliente);
 
-    Optional<Object> actualizarCliente(Long idCliente, ClienteRequest clienteRequest);
+    Optional<UsuarioClienteDto> actualizarCliente(Long idCliente, ClienteRequest clienteRequest);
 
-    void eliminarCliente(Long id);
+    UsuarioClienteDto eliminarCliente(Long id);
 }
