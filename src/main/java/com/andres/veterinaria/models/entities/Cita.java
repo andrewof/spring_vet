@@ -17,15 +17,16 @@ public class Cita {
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    @Column(name = "fecha_hora")
+    @ManyToOne
+    @JoinColumn(name = "id_mascota", nullable = false)
+    private Mascota mascota;
+
+    @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoCita estado = EstadoCita.PENDIENTE;
-
-    @Column(name = "motivo_rechazo")
-    private String motivoRechazo;
 
     public Long getIdCita() {
         return idCita;
@@ -59,11 +60,11 @@ public class Cita {
         this.estado = estado;
     }
 
-    public String getMotivoRechazo() {
-        return motivoRechazo;
+    public Mascota getMascota() {
+        return mascota;
     }
 
-    public void setMotivoRechazo(String motivoRechazo) {
-        this.motivoRechazo = motivoRechazo;
+    public void setMascota(Mascota mascota) {
+        this.mascota = mascota;
     }
 }
