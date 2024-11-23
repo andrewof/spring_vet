@@ -2,7 +2,9 @@ package com.andres.veterinaria.models.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "citas")
@@ -21,12 +23,16 @@ public class Cita {
     @JoinColumn(name = "id_mascota", nullable = false)
     private Mascota mascota;
 
-    @Column(name = "fecha_hora", nullable = false)
-    private LocalDateTime fechaHora;
+    @Column(name = "fecha", nullable = false)
+    private LocalDate fecha;
+
+    @Column(name = "hora", nullable = false)
+    private LocalTime hora;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoCita estado = EstadoCita.PENDIENTE;
+
 
     public Long getIdCita() {
         return idCita;
@@ -44,12 +50,28 @@ public class Cita {
         this.cliente = cliente;
     }
 
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
+    public Mascota getMascota() {
+        return mascota;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setMascota(Mascota mascota) {
+        this.mascota = mascota;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
     }
 
     public EstadoCita getEstado() {
@@ -58,13 +80,5 @@ public class Cita {
 
     public void setEstado(EstadoCita estado) {
         this.estado = estado;
-    }
-
-    public Mascota getMascota() {
-        return mascota;
-    }
-
-    public void setMascota(Mascota mascota) {
-        this.mascota = mascota;
     }
 }

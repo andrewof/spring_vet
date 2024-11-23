@@ -50,7 +50,8 @@ public class CitaServiceImpl implements CitaService {
             throw new RuntimeException("La mascota no pertenece al cliente especificado");
         }
 
-        if (citaRepository.existePorClienteFecha(cita.getCliente().getIdCliente(), cita.getFechaHora())) {
+        if (citaRepository.existePorClienteFecha(cita.getCliente().getIdCliente(),
+                cita.getFecha(), cita.getHora()) > 0) {
             throw new RuntimeException("Ya existe una cita en el horario especificado");
         }
 

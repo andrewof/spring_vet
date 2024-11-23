@@ -1,6 +1,10 @@
 package com.andres.veterinaria.controllers;
 
+import com.andres.veterinaria.models.dto.CitaDto;
 import com.andres.veterinaria.models.entities.Cita;
+import com.andres.veterinaria.models.entities.Cliente;
+import com.andres.veterinaria.models.entities.Mascota;
+import com.andres.veterinaria.models.mapper.CitaMapperDto;
 import com.andres.veterinaria.services.CitaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +27,9 @@ public class CitaController {
 
 
     @PostMapping("/agendar")
-    public ResponseEntity<?> agendarCita(@Valid @RequestBody Cita cita, BindingResult result) {
+    public ResponseEntity<?> agendarCita(@Valid @RequestBody CitaDto citaDto, BindingResult result) {
+        Cita cita = CitaMapperDto.toEntity(citaDto);
+
         return ResponseEntity.ok(citaService.agendarCita(cita));
     }
 }

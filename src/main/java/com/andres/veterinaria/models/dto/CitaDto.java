@@ -1,28 +1,29 @@
 package com.andres.veterinaria.models.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class CitaDto {
 
     private Long idCita;
     private Long idCliente;
     private Long idMascota;
-    private LocalDateTime fechaHora;
+    private LocalDate fecha;
+    private LocalTime hora;
     private String estado;
 
     public CitaDto() {
     }
 
-    // Constructor con parámetros
-    public CitaDto(Long idCita, Long idCliente, Long idMascota, LocalDateTime fechaHora, String estado) {
+    public CitaDto(Long idCita, Long idCliente, Long idMascota, LocalDate fecha, LocalTime hora, String estado) {
         this.idCita = idCita;
         this.idCliente = idCliente;
         this.idMascota = idMascota;
-        this.fechaHora = fechaHora;
+        this.fecha = fecha;
+        this.hora = hora;
         this.estado = estado;
     }
 
-    // Getters y Setters
     public Long getIdCita() {
         return idCita;
     }
@@ -47,12 +48,20 @@ public class CitaDto {
         this.idMascota = idMascota;
     }
 
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
+    public LocalDate getFecha() {
+        return fecha;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
     }
 
     public String getEstado() {
